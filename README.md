@@ -12,7 +12,6 @@ This study re-examines the CHSH inequality using only ψ⁻-entangled trials fro
 
 - `bell_analysis.py` — Main analysis code (CHSH $S$, p-values, Z-scores)
 - `bootstrap_analysis.py` — Bootstrap resampling for $S$ distribution
-- `figures/` — Contains the CHSH vs n plot, bar charts, bootstrap histograms
 
 ## 📊 Requirements
 
