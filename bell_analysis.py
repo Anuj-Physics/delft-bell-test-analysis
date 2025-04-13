@@ -143,6 +143,52 @@ plt.xlabel("Number of ψ⁻ Trials")
 plt.ylabel("CHSH S")
 plt.title("CHSH S vs Sample Size")
 plt.legend()
+
+def plot_CHSH_E_bars(a, b, x, y, label="ψ⁻ Subset"):
+    a = np.array(a)
+    b = np.array(b)
+    x = np.array(x)
+    y = np.array(y)
+
+    settings = [(0,0), (0,1), (1,0), (1,1)]
+    E_vals = []
+    E_errs = []
+    counts = []
+
+    for a_set, b_set in settings:
+        mask = (a == a_set) & (b == b_set)
+        n = np.sum(mask)
+        counts.append(n)
+        if n == 0:
+            E_vals.append(0)
+            E_errs.append(0)
+        else:
+            outcomes = x[mask] * y[mask]
+            E = np.mean(outcomes)
+            err = np.sqrt((1 - E**2) / n)
+            E_vals.append(E)
+            E_errs.append(err)
+
+    labels = ["(0,0)", "(0,1)", "(1,0)", "(1,1)"]
+    x_pos = np.arange(len(labels))
+
+    plt.figure(figsize=(7, 4))
+    plt.bar(x_pos, E_vals, yerr=E_errs, capsize=10, color="mediumseagreen", alpha=0.85)
+    plt.axhline(0, linestyle='--', color='gray')
+    plt.xticks(x_pos, labels)
+    plt.ylim(-1.1, 1.1)
+    plt.ylabel("E(a, b)")
+    plt.title(f"CHSH Correlations per Setting — {label}")
+    for i, n in enumerate(counts):
+        plt.text(i, E_vals[i] + 0.08*np.sign(E_vals[i]), f"n={n}", ha='center', fontsize=9)
+    plt.tight_layout()
+    plt.show()
+
+plot_CHSH_E_bars(all_a[0], all_b[0], all_x[0], all_y[0], label="20151201od (relaxed)")
+plot_CHSH_E_bars(all_a[1], all_b[1], all_x[1], all_y[1], label="Old Detector ψ⁻")
+plot_CHSH_E_bars(all_a[2], all_b[2], all_x[2], all_y[2], label="New Detector ψ⁻")
+plot_CHSH_E_bars(a_all, b_all, x_all, y_all, label="ψ⁻ Combined")
+
 plt.grid(True)
 plt.tight_layout()
 plt.show()
